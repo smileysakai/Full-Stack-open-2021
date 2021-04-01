@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
+import personService from './services/persons'
+//const baseUrl = 'http://localhost:3001/persons'
+
 
 const Filter = (props) => {
   return(
@@ -26,12 +29,13 @@ const PersonForm = (props) => {
 }
 
 const Persons = (props) => {
-  const {personsToShow} = props
+  const personsToShowFix = [...props.personsToShow]
   return(
     <div>
-      {personsToShow.map((person) => {
+      {personsToShowFix.map((person) => {
+        //console.log(person.id)
         return(
-          <div key={person.name}>{person.name} {person.number}</div>
+          <div key={person.id}> {person.name} {person.number} <button onClick={() => props.handleDelete([person.id, person.name])}>delete</button></div>
         )
       }
       )}
@@ -47,17 +51,11 @@ const App = () => {
   const [ showAll, setShowAll ] = useState(true)  
   const [ filterName, setFilterName] = useState('')
 
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }
-  
-  useEffect(hook, [])
+  useEffect(() => {
+    personService
+      .getPersons()
+      .then ( contacts => setPersons(contacts))
+  },[])
 
   const personsToShow = showAll    
   ? persons    
@@ -65,21 +63,29 @@ const App = () => {
 
   const addName = (event) => {    
     event.preventDefault()
-    let nameexists = false
-    persons.forEach(function(person) {
-      if (newName === person.name){
-        window.alert(`${newName} is already added to phonebook`)
-        nameexists = true
-      } 
-    })
-    if (!nameexists){
-      const nameObject = {
-        name: newName,
-        number: newNumber
+    const nameObject = {
+      name: newName,
+      number: newNumber
+    }
+    const [contactExist] = persons.filter(person => person.name===newName)
+    //console.log(contactExist.id)
+    if (contactExist.length !== 0){
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        //functionality for editing contact
+        personService.updatePerson(contactExist.id, nameObject)
+          .then( updatedPerson => {
+            setPersons(persons.map(person => person.id !== contactExist.id ? person : updatedPerson))
+          })
       }
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+    } else {
+      //add new person
+      personService
+        .addPerson(nameObject)
+        .then( addedPersonData => {
+          setPersons(persons.concat(addedPersonData))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
@@ -101,6 +107,14 @@ const App = () => {
     }
   }
 
+  const deletePerson = ([contactid, contactname]) => {
+    if (window.confirm(`Delete ${contactname} ?`)){
+      personService
+        .deletePerson(contactid)
+      setPersons(persons.filter(person=> person.id !==contactid))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -108,7 +122,7 @@ const App = () => {
       <h2>add a new</h2>
         <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber ={newNumber} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-        <Persons personsToShow = {personsToShow} />
+        <Persons personsToShow = {personsToShow} handleDelete = {deletePerson}/>
     </div>
   )
 }
