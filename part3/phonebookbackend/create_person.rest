@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "VS Code Rest Client",
-    "number": "4324-43244242"
+    "number": "4324-43244242333"
 }
 
 ###
@@ -20,7 +20,7 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Lord Tryhard",
+    "name": "Lord TryharDSDd",
     "number": "765484325"
 }
 
@@ -33,3 +33,15 @@ Content-Type: application/json
     "name": "Test",
     "number": "765484325"
 }
+
+###
+PUT http://localhost:3001/api/persons/607518d3c067781e807e73f1
+Content-Type: application/json
+
+{
+    "name": "VS Code Rest Client",
+    "number": "99432432421"
+}
+
+###
+GET http://localhost:3001/api/persons/606fd2cf7d2174426404241b
