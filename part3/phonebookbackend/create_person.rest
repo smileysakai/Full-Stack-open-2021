@@ -1,0 +1,35 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "VS Code Rest Client",
+    "number": "4324-43244242"
+}
+
+###
+GET http://localhost:3001/api/persons
+
+###
+DELETE http://localhost:3001/api/persons/60752283e782c608f0a0571c
+
+###
+DELETE http://localhost:3001/api/persons/hgfjsdhghfdfdsg
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Lord Tryhard",
+    "number": "765484325"
+}
+
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Test",
+    "number": "765484325"
+}
