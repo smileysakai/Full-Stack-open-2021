@@ -7,3 +7,6 @@ content-type: application/json
     "url": "",
     "likes": 0
 }
+
+###
+GET http://localhost:3003/api/blogs
