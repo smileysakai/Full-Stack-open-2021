@@ -5,3 +5,6 @@
 /part1
 /part2
 /part3
+*.json
+part1/unicafe/package-lock.json
+part1/unicafe/src/index.css
