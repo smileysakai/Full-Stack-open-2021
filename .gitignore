@@ -1,0 +1,7 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# files removed from local machine
+/part0
+/part1
+/part2
+/part3
